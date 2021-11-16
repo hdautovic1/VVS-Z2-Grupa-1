@@ -7,6 +7,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZivotinjskaFarma", "Zivotin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Zadatak 2", "Zadatak 2\Zadatak 2.csproj", "{6906562D-AF97-4440-B84E-E7D17A63CE16}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestoviZ1", "TestoviZ1\TestoviZ1.csproj", "{B2F90CAC-3583-4AE8-9397-1A64C52ACF4D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{6906562D-AF97-4440-B84E-E7D17A63CE16}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6906562D-AF97-4440-B84E-E7D17A63CE16}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6906562D-AF97-4440-B84E-E7D17A63CE16}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B2F90CAC-3583-4AE8-9397-1A64C52ACF4D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B2F90CAC-3583-4AE8-9397-1A64C52ACF4D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B2F90CAC-3583-4AE8-9397-1A64C52ACF4D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B2F90CAC-3583-4AE8-9397-1A64C52ACF4D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

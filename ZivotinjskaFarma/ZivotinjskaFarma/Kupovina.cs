@@ -68,6 +68,7 @@ namespace ZivotinjskaFarma
                     return false;
                 }
             }
+
             if(kupljeniProizvod.Ime.Equals("Vuna"))
             {
                 if((rokIsporuke - datumKupovine).TotalDays < 30)
