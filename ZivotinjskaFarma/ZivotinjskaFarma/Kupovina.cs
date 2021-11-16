@@ -55,12 +55,28 @@ namespace ZivotinjskaFarma
         /// potrebno je vratiti FALSE, a u suprotnom je potrebno vratiti TRUE.
         /// </summary>
         /// <returns></returns>
-        public bool VerificirajKupovinu()
+         public bool VerificirajKupovinu()
         {
-            //throw new NotImplementedException();
+            //Tražena količina veća od količine proizvoda koja je na stanju
+            if (kolicina > kupljeniProizvod.KoličinaNaStanju)
+                return false;
+
+            if(kupljeniProizvod.Ime.Equals("Mlijeko") || kupljeniProizvod.Ime.Equals("Jaja") || kupljeniProizvod.Ime.Equals("Sir"))
+            {
+                if(!((rokIsporuke - datumKupovine).TotalDays >= 2 && (rokIsporuke - datumKupovine).TotalDays <= 7))
+                {
+                    return false;
+                }
+            }
+            if(kupljeniProizvod.Ime.Equals("Vuna"))
+            {
+                if((rokIsporuke - datumKupovine).TotalDays < 30)
+                {
+                    return false;
+                }
+            }
             return true;
         }
-
         public static int DajSljedeciBroj()
         {
             return brojac++;
