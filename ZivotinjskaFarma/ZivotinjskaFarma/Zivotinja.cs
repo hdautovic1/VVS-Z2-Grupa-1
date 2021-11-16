@@ -102,6 +102,7 @@ namespace ZivotinjskaFarma
                 }
                 if (suma / 3 < 4) proizvođač = false;
             }
+            return true;
         }
 
         public void PregledajZivotinju(string osnovneInfo, string napomena, string ocjena)
