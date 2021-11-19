@@ -158,7 +158,26 @@ namespace ZivotinjskaFarma
         /// <returns></returns>
         public double ObračunajPorez()
         {
-            throw new NotImplementedException();
+            double osnovica = 10;
+            double porez = 0;
+
+            foreach(Lokacija lokacija in lokacije)
+            {
+                if (lokacija.Površina > 10000)
+                    porez += osnovica * 0.02;
+                else if (lokacija.Površina >= 1000 && lokacija.Površina <= 10000 && lokacija.Država.Equals("Bosna i Hercegovina"))
+                    porez += osnovica * 0.015;
+                else if (lokacija.Površina >= 1000 && lokacija.Površina <= 10000)
+                    porez += osnovica * 0.05;
+                else if (lokacija.Površina < 1000 && (lokacija.Grad.Equals("Sarajevo") || lokacija.Grad.Equals("Banja Luka") ||
+                    lokacija.Grad.Equals("Tuzla") || lokacija.Grad.Equals("Mostar")))
+                    porez += osnovica * 0.01;
+                else if (lokacija.Površina < 1000)
+                    porez += osnovica * 0.03;
+
+            }
+
+            return porez;
         }
 
         #endregion
