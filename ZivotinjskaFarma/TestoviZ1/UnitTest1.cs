@@ -59,5 +59,76 @@ namespace TestoviZ1
             verificirana = k.VerificirajKupovinu();
             Assert.IsTrue(verificirana);
         }
+        [TestMethod]
+        public void TestObracunaPoreza()
+        {
+            List<Lokacija> lokacije = new List<Lokacija>();
+            List<string> parametri = new List<string>();
+            Farma farma = new Farma();
+
+            //Lokacija 1, površina > 10000
+            parametri.Add("naziv");
+            parametri.Add("Adresa");
+            parametri.Add("Mostar");
+            parametri.Add("10001");
+            parametri.Add("Bosna i Hercegovina");
+
+            Lokacija lokacija1 = new Lokacija(parametri, 15000);
+
+            //Lokacija 2, površina >= 1000 & povrsina <= 10000, država Bosna i Hercegovina
+            parametri.Clear();
+            parametri.Add("naziv");
+            parametri.Add("Adresa");
+            parametri.Add("Sarajevo");
+            parametri.Add("10001");
+            parametri.Add("Bosna i Hercegovina");
+
+            Lokacija lokacija2 = new Lokacija(parametri, 5400);
+
+            //Lokacija 3, površina >= 1000 & povrsina <= 10000
+            parametri.Clear();
+            parametri.Add("naziv");
+            parametri.Add("Adresa");
+            parametri.Add("Rijeka");
+            parametri.Add("34789");
+            parametri.Add("Hrvatska");
+
+            Lokacija lokacija3 = new Lokacija(parametri, 9785);
+
+
+            //Lokacija 4, površina < 1000, grad Banja Luka
+            parametri.Clear();
+            parametri.Add("naziv");
+            parametri.Add("Adresa");
+            parametri.Add("Banja Luka");
+            parametri.Add("10111");
+            parametri.Add("Bosna i Hercegovina");
+
+            Lokacija lokacija4 = new Lokacija(parametri, 756);
+
+
+
+            //Lokacija 5, površina < 1000
+            parametri.Clear();
+            parametri.Add("naziv");
+            parametri.Add("Adresa");
+            parametri.Add("Trebinje");
+            parametri.Add("47890");
+            parametri.Add("Bosna i Hercegovina");
+
+            Lokacija lokacija5 = new Lokacija(parametri, 756);
+
+            farma.DodavanjeNoveLokacije(lokacija1);
+            farma.DodavanjeNoveLokacije(lokacija2);
+            farma.DodavanjeNoveLokacije(lokacija3);
+            farma.DodavanjeNoveLokacije(lokacija4);
+            farma.DodavanjeNoveLokacije(lokacija5);
+
+            double porez = farma.ObračunajPorez();
+            double ocekivano = 1.25;
+          
+            Assert.AreEqual(ocekivano, porez);
+
+        }
     }
 }
