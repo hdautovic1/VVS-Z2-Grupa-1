@@ -21,6 +21,7 @@ namespace TestZadak3
             Assert.AreEqual(farma.Zivotinje.Count, 0);
             Assert.AreEqual(farma.Kupovine.Count, 0);
         }
+
         [TestMethod]
         public void TestDodavanjeiBrisanjeLokacijeFarme()
         {
@@ -150,7 +151,8 @@ namespace TestZadak3
             Kupovina k = farma.Kupovine[0];
             farma.BrisanjeKupovine(k);
             Assert.AreEqual(farma.Kupovine.Count, 0);
-
+            uspjesnaKupovina = farma.KupovinaProizvoda(p, DateTime.Today.AddDays(3), 120);
+            Assert.IsFalse(uspjesnaKupovina);
         }
         #endregion
 
@@ -178,7 +180,7 @@ namespace TestZadak3
 
         #region Zivotinja
         [TestMethod]
-        public void TestZivotinjaKonstruktor()
+        public void ATestZivotinjaKonstruktor()
         {
             List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
            
@@ -230,9 +232,71 @@ namespace TestZadak3
             Lokacija l = new Lokacija(parametri, 100);
             Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 0, l);}
 
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TestZivotinjaPogresnaMasa()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 100);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 0, 100, l);
+        }
+
         #endregion
 
         #region Proizvod
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestProizvodPogresnaVrsta()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 100);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
+            Proizvod p = new Proizvod("", "", "x", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestProizvodPogresanProizvođač()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 100);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
+            Proizvod p = new Proizvod("", "", "Jaja", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestProizvodPogresanDatumProizvodnje()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 100);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
+            Proizvod p = new Proizvod("", "", "Mlijeko", z, DateTime.Today.AddDays(2), DateTime.Today.AddDays(5), 100);
+        }
+
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestProizvodPogresanRokTrajanja()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 100);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
+            Proizvod p = new Proizvod("", "", "Mlijeko", z, DateTime.Today, DateTime.Today.AddDays(-5), 100);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestProizvodPogresnaKolicina()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 100);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
+            Proizvod p = new Proizvod("", "", "Mlijeko", z, DateTime.Today, DateTime.Today.AddDays(5), 0);
+        }
+
+
 
         [TestMethod]
         public void TestProizvodKonstrukotr()
