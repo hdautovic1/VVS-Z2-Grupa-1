@@ -130,5 +130,72 @@ namespace TestoviZ1
             Assert.AreEqual(ocekivano, porez);
 
         }
+
+        [TestMethod]
+        public void TestProvjeriStanjeZivotinje()
+        {
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("1814");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            
+            //slucaj kada je zivotinja starija od 10 godina
+            Zivotinja zivotinja1 = new Zivotinja(ZivotinjskaVrsta.Krava, new System.DateTime(2011, 4, 1), 800, 150, new Lokacija(parametri, 12000));
+            
+            zivotinja1.ProvjeriStanjeZivotinje();
+
+            Assert.IsFalse(zivotinja1.Proizvođač);
+
+
+
+            //slucaj kada je zivotinja starija od 7 godina i najnoviji pregled ima ocjenu 3.5 ili manje
+            Zivotinja zivotinja2 = new Zivotinja(ZivotinjskaVrsta.Ovca, new System.DateTime(2014, 11, 24), 180, 117, new Lokacija(parametri, 12000));
+            
+            zivotinja2.PregledajZivotinju("", "", "4");
+            zivotinja2.PregledajZivotinju("", "", "3.2");
+
+            zivotinja2.ProvjeriStanjeZivotinje();
+
+            Assert.IsFalse(zivotinja2.Proizvođač);
+
+
+
+            //slucaj kada je zivotinja starija od 7 godina, ali najnoviji pregled ima ocjenu vecu od 3.5
+            Zivotinja zivotinja3 = new Zivotinja(ZivotinjskaVrsta.Ovca, new System.DateTime(2014, 11, 24), 180, 117, new Lokacija(parametri, 12000));
+
+            zivotinja3.PregledajZivotinju("", "", "3.8");
+            zivotinja3.PregledajZivotinju("", "", "3.4");
+            zivotinja3.PregledajZivotinju("", "", "3.6");
+
+            zivotinja3.ProvjeriStanjeZivotinje();
+
+            Assert.IsFalse(zivotinja3.Proizvođač);
+
+
+
+            //posljednji slucaj
+            Zivotinja zivotinja4 = new Zivotinja(ZivotinjskaVrsta.Patka, new System.DateTime(2020, 9, 1), 22, 60, new Lokacija(parametri, 12000));
+            
+            zivotinja4.PregledajZivotinju("", "", "4");
+            zivotinja4.PregledajZivotinju("", "", "3.2");
+            zivotinja4.PregledajZivotinju("", "", "3.5");
+
+            Assert.IsFalse(zivotinja4.Proizvođač);
+
+
+
+            Zivotinja zivotinja5 = new Zivotinja(ZivotinjskaVrsta.Patka, new System.DateTime(2020, 9, 1), 22, 60, new Lokacija(parametri, 12000));
+
+            zivotinja5.PregledajZivotinju("", "", "4");
+            zivotinja5.PregledajZivotinju("", "", "4.8");
+            zivotinja5.PregledajZivotinju("", "", "4.7");
+
+            Assert.IsTrue(zivotinja5.Proizvođač);
+
+
+        }
     }
 }
