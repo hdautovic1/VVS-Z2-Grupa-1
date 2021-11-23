@@ -264,7 +264,7 @@ namespace TestZadak3
             //slucaj kada je zivotinja starija od 7 godina i najnoviji pregled ima ocjenu 3.5 ili manje
             Zivotinja zivotinja2 = new Zivotinja(ZivotinjskaVrsta.Ovca, new System.DateTime(2014, 11, 24), 180, 117, new Lokacija(parametri, 12000));
 
-            zivotinja2.PregledajZivotinju("", "", "4");
+            zivotinja2.PregledajZivotinju("", "", "4.0");
             zivotinja2.PregledajZivotinju("", "", "3.2");
 
             zivotinja2.ProvjeriStanjeZivotinje();
@@ -289,9 +289,11 @@ namespace TestZadak3
             //posljednji slucaj
             Zivotinja zivotinja4 = new Zivotinja(ZivotinjskaVrsta.Patka, new System.DateTime(2020, 9, 1), 22, 60, new Lokacija(parametri, 12000));
 
-            zivotinja4.PregledajZivotinju("", "", "4");
+            zivotinja4.PregledajZivotinju("", "", "4.0");
             zivotinja4.PregledajZivotinju("", "", "3.2");
             zivotinja4.PregledajZivotinju("", "", "3.5");
+
+            zivotinja4.ProvjeriStanjeZivotinje();
 
             Assert.IsFalse(zivotinja4.Proizvođač);
 
@@ -299,11 +301,14 @@ namespace TestZadak3
 
             Zivotinja zivotinja5 = new Zivotinja(ZivotinjskaVrsta.Patka, new System.DateTime(2020, 9, 1), 22, 60, new Lokacija(parametri, 12000));
 
-            zivotinja5.PregledajZivotinju("", "", "4");
+            zivotinja5.PregledajZivotinju("", "", "4.0");
             zivotinja5.PregledajZivotinju("", "", "4.8");
             zivotinja5.PregledajZivotinju("", "", "4.7");
+            zivotinja5.ProvjeriStanjeZivotinje();
 
             Assert.IsTrue(zivotinja5.Proizvođač);
+
+
         }
 
 

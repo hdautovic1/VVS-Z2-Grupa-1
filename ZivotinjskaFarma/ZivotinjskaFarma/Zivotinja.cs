@@ -87,20 +87,28 @@ namespace ZivotinjskaFarma
         /// </summary>
         public void ProvjeriStanjeZivotinje()
         {
-            if ((starost - DateTime.Now).Days >= (10 * 365)) { proizvođač = false; }
-            else if ((starost - DateTime.Now).Days >= (7 * 365) && Double.Parse(pregledi[pregledi.Count - 1]) <= 3.5) { proizvođač = false; }
+            if ((DateTime.Now-starost).Days >= (10 * 365)) { 
+                proizvođač = false; 
+            }
+            else if ((DateTime.Now - starost).Days >= (7 * 365) && Double.Parse(pregledi[pregledi.Count - 1].Substring(pregledi[pregledi.Count -1].Length -3)) <= 3.5) {
+                proizvođač = false; 
+            }
             else
             {
-                Double suma = 0;
+                double suma = 0;
                 int brojac = 0;
                 for (int i = pregledi.Count - 1 ; ; i--)
                 {
-                    suma += Double.Parse(pregledi[i]);
+                    suma += Double.Parse(pregledi[i].Substring(pregledi[i].Length - 3));
                     brojac++;
                     if (brojac == 3) break;
 
                 }
-                if (suma / 3 < 4) proizvođač = false;
+
+                if ((suma / 3) < 4) {
+                    Console.WriteLine(vrsta + " " + proizvođač);
+                    proizvođač = false; 
+                }
             }
         }
 
