@@ -7,6 +7,10 @@ namespace TestoviZ1
     [TestClass]
     public class UnitTest1
     {
+
+        /// <summary>
+        /// Testirao Hamza Dautović
+        /// </summary>
         [TestMethod]
         public void TestVerificiraj()
         {
@@ -59,6 +63,10 @@ namespace TestoviZ1
             verificirana = k.VerificirajKupovinu();
             Assert.IsTrue(verificirana);
         }
+
+        /// <summary>
+        /// Testirala Selma Hadžijusufović
+        /// </summary>
         [TestMethod]
         public void TestObracunaPoreza()
         {
@@ -131,6 +139,9 @@ namespace TestoviZ1
 
         }
 
+        /// <summary>
+        /// Testirala Jasmina Hasanović
+        /// </summary>
         [TestMethod]
         public void TestProvjeriStanjeZivotinje()
         {
@@ -194,6 +205,7 @@ namespace TestoviZ1
             zivotinja5.PregledajZivotinju("", "", "4.0");
             zivotinja5.PregledajZivotinju("", "", "4.8");
             zivotinja5.PregledajZivotinju("", "", "4.7");
+
             zivotinja5.ProvjeriStanjeZivotinje();
 
             Assert.IsTrue(zivotinja5.Proizvođač);

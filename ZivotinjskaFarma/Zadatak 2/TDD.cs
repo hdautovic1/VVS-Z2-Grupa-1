@@ -25,10 +25,12 @@ namespace Zadatak_2
             z1.Proizvođač = false;
             z2.Proizvođač = false;
             z3.Proizvođač = false;
-            
-            Veterinar veterinar = new Veterinar();
-            f.ObaviVeterinarskiPregled(veterinar);
 
+            //Veterinar veterinar = new Veterinar();
+            // f.ObaviVeterinarskiPregled(veterinar);
+            Spy spy = new Spy();
+            spy.Opcija = 0;
+            f.ObaviVeterinarskiPregled(spy);
             Assert.AreEqual(f.Zivotinje[0].Proizvođač, true);
             Assert.AreEqual(f.Zivotinje[1].Pregledi.Count, 1);
             Assert.AreEqual(f.Zivotinje[2].Proizvođač, false);
@@ -49,7 +51,7 @@ namespace Zadatak_2
             Assert.AreEqual(f.Zivotinje.Count, 1);
             Assert.IsTrue(f.Zivotinje.Contains(kokoska));
             Assert.AreEqual(f.Lokacije.Count, 1);
-            
+
             f.SpecijalizacijaFarme(ZivotinjskaVrsta.Krava, 100);
 
             Assert.AreEqual(f.Zivotinje.Count, 100);
@@ -72,7 +74,7 @@ namespace Zadatak_2
             Assert.AreEqual(f.Zivotinje.Count, 1);
             Assert.IsTrue(f.Zivotinje.Contains(magarac));
             Assert.AreEqual(f.Lokacije.Count, 1);
-            
+
             f.SpecijalizacijaFarme(ZivotinjskaVrsta.Magarac, 100);
 
             Assert.AreEqual(f.Zivotinje.Count, 100);
@@ -96,7 +98,7 @@ namespace Zadatak_2
             Assert.AreEqual(f.Zivotinje.Count, 1);
             Assert.IsTrue(f.Zivotinje.Contains(magarac));
             Assert.AreEqual(f.Lokacije.Count, 1);
-            
+
             f.SpecijalizacijaFarme(ZivotinjskaVrsta.Koza, 100);
         }
 

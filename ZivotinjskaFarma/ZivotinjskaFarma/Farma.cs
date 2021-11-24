@@ -155,7 +155,8 @@ namespace ZivotinjskaFarma
         /// i vratiti konačni rezultat.
         /// Ukoliko nije definisana nijedna lokacija, potrebno je vratiti iznos od 0 KM.
         /// </summary>
-        /// <returns></returns>
+        /// Implementirala Jasmina Hasanović
+        
         public double ObračunajPorez()
         {
             double osnovica = 10;

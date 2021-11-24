@@ -1,0 +1,9 @@
+﻿Naziv,Adresa,Broj ulice,Grad,Poštanski broj,Država,Površina
+ ,Neka adresa,17,Sarajevo,71000,Bosna i Hercegovina,10000
+Neki naziv, ,17,Mostar,71000,Bosna i Hercegovina,10000
+Neki naziv,Neka adresa,0,Tuzla,71000,Bosna i Hercegovina,10000
+Neki naziv,Neka adresa,17,Stolac,71000,Bosna i Hercegovina,10000
+Neki naziv,Neka adresa,17,Bihać,1234,Bosna i Hercegovina,10000
+Neki naziv,Neka adresa,17,Split,123167,Hrvatska,10000
+Neki naziv,Neka adresa,17,Sarajevo,71000,Bosna i Hercegovina,0
+Neki naziv,Neka adresa,17,Pula,71000,Italija,10000

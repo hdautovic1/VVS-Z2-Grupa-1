@@ -85,6 +85,7 @@ namespace ZivotinjskaFarma
         /// U suprotnom, potrebno je izvršiti provjeru 3 najnovija pregleda i ukoliko je prosječna ocjena manja od 4,
         /// životinja prestaje biti proizvođač.
         /// </summary>
+        /// Implementirao Hamza Dautović
         public void ProvjeriStanjeZivotinje()
         {
             if ((DateTime.Now-starost).Days >= (10 * 365)) { 
