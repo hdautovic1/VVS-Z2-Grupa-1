@@ -71,10 +71,34 @@ namespace ZivotinjskaFarma
         {
             return lokacije.Remove(lokacija);
         }
-
+        //Implementirala Selma Hadžijusufović
         public void SpecijalizacijaFarme(ZivotinjskaVrsta vrsta, int brojGrla)
         {
-            throw new NotImplementedException();
+            if(vrsta.Equals(ZivotinjskaVrsta.Koza))
+            {
+                throw new InvalidOperationException("Nepodržana vrsta");
+            }
+
+            if(brojGrla >= 1000)
+            {
+                throw new ArgumentException("Previše grla");
+            }
+
+            zivotinje = new List<Zivotinja>();
+            lokacije = new List<Lokacija>();
+
+            Lokacija lokacija = new Lokacija(new List<string>() { "Velika štala", "Seoski put", "12", "Sarajevo", "71000", "Bosna i Hercegovina" }, 181.22);
+            for (int i = 0; i < brojGrla/25; i++)
+                lokacije.Add(lokacija);
+         
+            for (int i = 0; i < brojGrla; i++)
+            {
+                Zivotinja zivotinja = new Zivotinja(vrsta, DateTime.Parse("01/01/2021"), 40.1, 74.11, lokacija);
+                zivotinje.Add(zivotinja);
+              
+            }
+
+           
         }
 
         public bool KupovinaProizvoda(Proizvod p, DateTime rok, int količina)
