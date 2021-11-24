@@ -178,7 +178,78 @@ namespace TestZadak3
             uspjesnaKupovina = farma.KupovinaProizvoda(p, DateTime.Today.AddDays(3), 120);
             Assert.IsFalse(uspjesnaKupovina);
         }
-        //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima)
+        //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima i basic testovi)
+        [TestMethod]
+        public void TestSistematskogPregleda()
+        {
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("1814");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+
+            Zivotinja z1 = new Zivotinja(ZivotinjskaVrsta.Krava, new DateTime(2010, 4, 1), 800, 150, new Lokacija(parametri, 1000));
+
+            Zivotinja z2 = new Zivotinja(ZivotinjskaVrsta.Ovca, new System.DateTime(2020, 11, 24), 180, 117, new Lokacija(parametri, 12000));
+
+            Zivotinja z3 = new Zivotinja(ZivotinjskaVrsta.Ovca, new System.DateTime(2013, 11, 24), 180, 117, new Lokacija(parametri, 12000));
+
+            List<String> informacije1 = new List<String> { "", "", "4  " };
+            List<String> informacije2 = new List<String> { "", "", "3  " };
+            List<String> informacije3 = new List<String> { "", "", "3  " };
+            z1.PregledajZivotinju(informacije1[0], informacije1[1], informacije1[2]);
+            z1.PregledajZivotinju(informacije2[0], informacije2[1], informacije2[2]);
+            z1.PregledajZivotinju(informacije3[0], informacije3[1], informacije3[2]);
+            
+            List<String> informacije4 = new List<String> { "", "", "2  " };
+            List<String> informacije5 = new List<String> { "", "", "3  " };
+            List<String> informacije6 = new List<String> { "", "", "3  "};
+            z2.PregledajZivotinju(informacije4[0], informacije4[1], informacije4[2]);
+            z2.PregledajZivotinju(informacije5[0], informacije5[1], informacije5[2]);
+            z2.PregledajZivotinju(informacije6[0], informacije6[1], informacije6[2]);
+
+
+            List<List<String>> informacije = new List<List<String>>();
+         
+            informacije.Add(informacije1);
+            informacije.Add(informacije2);
+            informacije.Add(informacije3);
+
+     
+
+            Farma farma = new Farma();
+            farma.RadSaZivotinjama("Dodavanje", z1);
+
+            farma.ObaviSistematskiPregled(informacije);
+            List<Zivotinja> zivotinje = farma.Zivotinje;
+            Assert.AreEqual(zivotinje[0].Pregledi.Count, 4);
+            Assert.IsFalse(zivotinje[0].Proizvođač);
+
+            farma.RadSaZivotinjama("Brisanje", z1);
+            farma.RadSaZivotinjama("Dodavanje", z2);
+            informacije.Clear();
+            informacije.Add(informacije4);
+            informacije.Add(informacije5);
+            informacije.Add(informacije6);
+            
+            farma.ObaviSistematskiPregled(informacije);
+            zivotinje = farma.Zivotinje;
+            Assert.AreEqual(zivotinje[0].Pregledi.Count, 4);
+            Assert.IsFalse(zivotinje[0].Proizvođač);
+
+
+            z3.PregledajZivotinju(informacije4[0], informacije4[1], informacije4[2]);
+            z3.PregledajZivotinju(informacije5[0], informacije5[1], informacije5[2]);
+            z3.PregledajZivotinju(informacije6[0], informacije6[1], informacije6[2]);
+            farma.RadSaZivotinjama("Brisanje", z2);
+            farma.RadSaZivotinjama("Dodavanje", z3);
+            farma.ObaviSistematskiPregled(informacije);
+            zivotinje = farma.Zivotinje;
+            Assert.IsFalse(zivotinje[0].Proizvođač);
+
+        }
         [TestMethod]
         //Životinja nije registrovana u bazi
         [ExpectedException(typeof(ArgumentException))]
@@ -274,7 +345,20 @@ namespace TestZadak3
         //    Assert.AreEqual(l.Površina, 100);
         //}
 
-        //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima)
+        //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima i basic tests)
+        [TestMethod]
+        public void TestGetHashCodeLokacije()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija1 = new Lokacija(parametri, 1000);
+            Lokacija lokacija2 = new Lokacija(parametri, 1000);
+
+            List<string> parametri2 = new List<string> { "Novi naziv", "Nova Adresa", "3", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija3 = new Lokacija(parametri2, 2000);
+            Assert.AreEqual(lokacija1.GetHashCode(), lokacija2.GetHashCode());
+            Assert.AreNotEqual(lokacija1.GetHashCode(), lokacija3.GetHashCode());
+
+        }
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void TestIzuzetakSetterNaziva()
@@ -351,12 +435,18 @@ namespace TestZadak3
         }
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
-        public void TestIzuzetakNeispravanBrojParametara()
+        public void TestIzuzetakNeispravanBrojParametara1()
         {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001" };
-            Lokacija lokacija = new Lokacija(parametri, 0);
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
         }
-
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakNeispravanBrojParametara2()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina", "Dodatni parametar" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+        }
         #endregion
 
         #region Zivotinja
@@ -505,7 +595,7 @@ namespace TestZadak3
 
         }
         [TestMethod]
-        public void TestGetHashCode()
+        public void TestGetHashCodeZivotinje()
         {
             List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
             Zivotinja zivotinja1 = new Zivotinja(ZivotinjskaVrsta.Krava, new System.DateTime(2011, 4, 1), 800, 150, new Lokacija(parametri, 12000));
@@ -766,6 +856,27 @@ namespace TestZadak3
             k.RokIsporuke = System.DateTime.Now.AddDays(31);
             verificirana = k.VerificirajKupovinu();
             Assert.IsTrue(verificirana);
+        }
+        [TestMethod]
+        public void TestIDaKupovine()
+        {
+            List<string> parametri = new List<string>();
+            parametri.Add("naziv");
+            parametri.Add("Adresa");
+            parametri.Add("Mostar");
+            parametri.Add("10001");
+            parametri.Add("Bosna i Hercegovina");
+
+            Lokacija l = new Lokacija(parametri, 100);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, System.DateTime.Now.AddDays(-500), 1200, 120, l);
+            Proizvod p = new Proizvod("Mlijeko", "opis", "Mlijeko", z, System.DateTime.Now.AddDays(-10), System.DateTime.Now.AddDays(10), 20);
+
+
+            //U slučaju kada su sve varijable odgovarajuće
+            Kupovina k = new Kupovina("kupacID", System.DateTime.Now, System.DateTime.Now.AddDays(5), p, 10, false);
+            Assert.AreEqual("kupacID", k.IDKupca1);
+            k.IDKupca1 = "noviID";
+            Assert.AreEqual("noviID", k.IDKupca1);
         }
         #endregion
 

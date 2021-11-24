@@ -108,7 +108,6 @@ namespace ZivotinjskaFarma
                 }
 
                 if ((suma / 3) < 4) {
-                    Console.WriteLine(vrsta + " " + proizvođač);
                     proizvođač = false; 
                 }
             }
@@ -119,7 +118,7 @@ namespace ZivotinjskaFarma
             string pregled = "OSNOVNE INFORMACIJE: " + osnovneInfo + "\n"
                             + "NAPOMENA: " + napomena + "\n"
                             + "OCJENA: " + ocjena;
-
+            SystemDia.WriteLine(pregled);
             pregledi.Add(pregled);
         }
 
