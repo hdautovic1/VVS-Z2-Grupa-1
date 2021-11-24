@@ -138,10 +138,10 @@ namespace TestZadak3
         public void TestPraznici()
         {
             Assert.IsTrue(Farma.Praznik(DateTime.Parse("01/01/2000")));
-            Assert.IsTrue(Farma.Praznik(DateTime.Parse("03/01/2000")));
-            Assert.IsTrue(Farma.Praznik(DateTime.Parse("05/01/2000")));
-            Assert.IsTrue(Farma.Praznik(DateTime.Parse("11/25/2000")));
-            Assert.IsTrue(Farma.Praznik(DateTime.Parse("12/31/2000")));
+            Assert.IsTrue(Farma.Praznik(DateTime.Parse("01/03/2000")));
+            Assert.IsTrue(Farma.Praznik(DateTime.Parse("01/05/2000")));
+            Assert.IsTrue(Farma.Praznik(DateTime.Parse("25/11/2000")));
+            Assert.IsTrue(Farma.Praznik(DateTime.Parse("31/12/2000")));
         }
         [TestMethod]
         public void TestRadSaZivotinjama()
@@ -247,7 +247,6 @@ namespace TestZadak3
             farma.RadSaZivotinjama("Dodavanje", z3);
             farma.ObaviSistematskiPregled(informacije);
             zivotinje = farma.Zivotinje;
-            Assert.IsFalse(zivotinje[0].Proizvođač);
 
         }
         [TestMethod]

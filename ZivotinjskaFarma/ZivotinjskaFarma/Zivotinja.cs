@@ -118,7 +118,6 @@ namespace ZivotinjskaFarma
             string pregled = "OSNOVNE INFORMACIJE: " + osnovneInfo + "\n"
                             + "NAPOMENA: " + napomena + "\n"
                             + "OCJENA: " + ocjena;
-            SystemDia.WriteLine(pregled);
             pregledi.Add(pregled);
         }
 
