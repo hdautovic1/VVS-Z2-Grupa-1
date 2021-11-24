@@ -137,8 +137,6 @@ namespace TestZadak3
         [TestMethod]
         public void TestPraznici()
         {
-                 
-
             Assert.IsTrue(Farma.Praznik(DateTime.Parse("01/01/2000")));
             Assert.IsTrue(Farma.Praznik(DateTime.Parse("03/01/2000")));
             Assert.IsTrue(Farma.Praznik(DateTime.Parse("05/01/2000")));
@@ -506,6 +504,18 @@ namespace TestZadak3
             zivotinja.Visina = 0;
 
         }
+        [TestMethod]
+        public void TestGetHashCode()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Zivotinja zivotinja1 = new Zivotinja(ZivotinjskaVrsta.Krava, new System.DateTime(2011, 4, 1), 800, 150, new Lokacija(parametri, 12000));
+            Zivotinja zivotinja2 = new Zivotinja(ZivotinjskaVrsta.Krava, new System.DateTime(2011, 4, 1), 800, 150, new Lokacija(parametri, 11000));
+            Zivotinja zivotinja3 = new Zivotinja(ZivotinjskaVrsta.Kokoška, new System.DateTime(2011, 1, 1), 300, 50, new Lokacija(parametri, 5000));
+
+            Assert.AreEqual(zivotinja1.GetHashCode(), zivotinja2.GetHashCode());
+            Assert.AreNotEqual(zivotinja1.GetHashCode(), zivotinja3.GetHashCode());
+
+        }
         #endregion
 
         #region Proizvod
@@ -570,6 +580,28 @@ namespace TestZadak3
             Proizvod p = new Proizvod("", "", "Mlijeko", zivotinja, DateTime.Now, new DateTime(2022, 5, 5), 12);
         }
         //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima)
+        [TestMethod]
+        public void TestGetteraProizvoda()
+        {
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
+
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Kokoška, DateTime.Now, 20, 50, l);
+            DateTime rok = new DateTime(2022, 5, 5);
+            DateTime datumProizvodnje = DateTime.Now;
+            Proizvod p = new Proizvod("", "", "Jaja", zivotinja, datumProizvodnje, rok, 12);
+            Assert.AreEqual("Jaja", p.Vrsta);
+            Assert.AreEqual(zivotinja, p.Proizvođač);
+            Assert.AreEqual(datumProizvodnje, p.DatumProizvodnje);
+            Assert.AreEqual(rok, p.RokTrajanja);
+
+        }
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
         //Vrsta proizvoda koja ne postoji
