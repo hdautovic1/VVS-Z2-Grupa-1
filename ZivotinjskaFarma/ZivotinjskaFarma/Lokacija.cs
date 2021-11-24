@@ -131,6 +131,23 @@ namespace ZivotinjskaFarma
             Država = parametri.ElementAt(i);
         }
 
+        public override bool Equals(object obj)
+        {
+            return obj is Lokacija lokacija &&
+                   Naziv == lokacija.Naziv &&
+                   Adresa == lokacija.Adresa &&
+                   Grad == lokacija.Grad &&
+                   Država == lokacija.Država &&
+                   BrojUlice == lokacija.BrojUlice &&
+                   PoštanskiBroj == lokacija.PoštanskiBroj &&
+                   Površina == lokacija.Površina;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Naziv, Adresa, Grad, Država, BrojUlice, PoštanskiBroj, Površina);
+        }
+
         #endregion
     }
 }

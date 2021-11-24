@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 
 namespace ZivotinjskaFarma
 {
@@ -121,6 +122,21 @@ namespace ZivotinjskaFarma
 
             pregledi.Add(pregled);
         }
+
+        public override bool Equals(object obj)
+        {
+            return obj is Zivotinja zivotinja &&
+                   Vrsta == zivotinja.Vrsta &&
+                   Starost == zivotinja.Starost &&
+                   TjelesnaMasa == zivotinja.TjelesnaMasa &&
+                   Visina == zivotinja.Visina;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Vrsta, Starost, TjelesnaMasa, Visina);
+        }
+
 
         #endregion
     }

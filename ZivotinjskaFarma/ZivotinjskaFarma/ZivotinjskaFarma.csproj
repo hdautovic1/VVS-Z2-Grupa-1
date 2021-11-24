@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <PackageReference Include="Csvhelper" Version="27.2.0" />
+    <PackageReference Include="System.Runtime" Version="4.3.1" />
   </ItemGroup>
 
 </Project>
