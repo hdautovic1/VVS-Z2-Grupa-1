@@ -21,7 +21,9 @@ namespace ZivotinjskaFarma
 
         #region Properties
 
-        public string IDKupca1 { get => IDKupca; set => IDKupca = value; }
+        public string IDKupca1 { 
+          get => IDKupca; 
+          set => IDKupca = value; }
         public DateTime DatumKupovine { get => datumKupovine; set => datumKupovine = value; }
         public DateTime RokIsporuke { get => rokIsporuke; set => rokIsporuke = value; }
         public Proizvod KupljeniProizvod { get => kupljeniProizvod; set => kupljeniProizvod = value; }
@@ -54,7 +56,8 @@ namespace ZivotinjskaFarma
         /// Ukoliko se kupovina ne može izvršiti zbog jednog od razloga navedenih iznad, 
         /// potrebno je vratiti FALSE, a u suprotnom je potrebno vratiti TRUE.
         /// </summary>
-        /// <returns></returns>
+        /// Implementirala Selma Hadžijusufović
+        
          public bool VerificirajKupovinu()
         {
             //Tražena količina veća od količine proizvoda koja je na stanju

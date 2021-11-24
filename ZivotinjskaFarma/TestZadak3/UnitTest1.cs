@@ -11,6 +11,32 @@ namespace TestZadak3
     [TestClass]
     public class UnitTest1
     {
+        public static IEnumerable<object[]> UčitajPodatkeCSV(string fileName)
+        {
+            using (var reader = new StreamReader(fileName))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+            {
+                var rows = csv.GetRecords<dynamic>();
+                foreach (var row in rows)
+                {
+                    var values = ((IDictionary<String, Object>)row).Values;
+                    var elements = values.Select(elem => elem.ToString()).ToList();
+                       if(fileName.Equals("NeispravniPodaciLokacija.csv"))
+                        yield return new object[] { elements[0], elements[1],
+                        elements[2], elements[3], elements[4], elements[5],double.Parse(elements[6]) };
+
+                       else if(fileName.Equals("NeispravniPodaciZivotinja.csv"))
+                        yield return new object[] { DateTime.Parse(elements[0]), double.Parse(elements[1]), 
+                            double.Parse(elements[2])};
+
+                       else if(fileName.Equals("NeispravniPodaciProizvod.csv"))
+                        yield return new object[] { elements[0],DateTime.Parse(elements[1]),
+                            DateTime.Parse(elements[2]),Int32.Parse(elements[3]) };
+                }
+            }
+        }
+
+
         #region Farma
         [TestMethod]
         public void TestInicijalizacijaFarme()
@@ -157,44 +183,79 @@ namespace TestZadak3
         #endregion
 
         #region Lokacija
-        [TestMethod]        
-        public void TestLokacija()
+
+        static IEnumerable<object[]> NeispravnaLokacijaCSV
         {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            List<string> parametri2 = new List<string> { "Naziv", "Adresa", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            get
+            {
+                return UčitajPodatkeCSV("NeispravniPodaciLokacija.csv");
+            }
+        }
+        [TestMethod]
+        [DynamicData("NeispravnaLokacijaCSV")]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestKonstruktoraLokacijeCSV (string naziv, string adresa, string brojUlice, string grad,
+            string postanskiBroj, string drzava, double povrsina)
+        {
+            List<string> parametri=new List<String>();
+            parametri.Add(naziv);
+            parametri.Add(adresa);
+            parametri.Add(brojUlice);
+            parametri.Add(grad);
+            parametri.Add(postanskiBroj);
+            parametri.Add(drzava);
 
-            Lokacija l = new Lokacija(parametri2,100);
-            l = new Lokacija(parametri, 100);
-
-            Assert.AreEqual(l.Adresa, "Adresa");
-            Assert.AreEqual(l.Naziv, "Naziv");
-            Assert.AreEqual(l.BrojUlice, 2);
-            Assert.AreEqual(l.Grad, "Sarajevo");
-            Assert.AreEqual(l.PoštanskiBroj, 10001);
-            Assert.AreEqual(l.Država, "Bosna i Hercegovina");
-            Assert.AreEqual(l.Površina, 100);
+            Lokacija l = new Lokacija(parametri,povrsina);
         }
 
-     
+
+        //[TestMethod]        
+        //public void TestLokacija()
+        //{
+        //    List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+        //    List<string> parametri2 = new List<string> { "Naziv", "Adresa", "Sarajevo", "10001", "Bosna i Hercegovina" };
+
+        //    Lokacija l = new Lokacija(parametri2,100);
+        //    l = new Lokacija(parametri, 100);
+
+        //    Assert.AreEqual(l.Adresa, "Adresa");
+        //    Assert.AreEqual(l.Naziv, "Naziv");
+        //    Assert.AreEqual(l.BrojUlice, 2);
+        //    Assert.AreEqual(l.Grad, "Sarajevo");
+        //    Assert.AreEqual(l.PoštanskiBroj, 10001);
+        //    Assert.AreEqual(l.Država, "Bosna i Hercegovina");
+        //    Assert.AreEqual(l.Površina, 100);
+        //}
+
+
         #endregion
 
         #region Zivotinja
-        [TestMethod]
-        public void ATestZivotinjaKonstruktor()
-        {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-           
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava,DateTime.Today.AddYears(-2), 1000, 150, l);
-            Assert.AreEqual(z.Vrsta.ToString(), ZivotinjskaVrsta.Krava.ToString());
-            Assert.AreEqual(z.TjelesnaMasa, 1000);
-            Assert.AreEqual(z.Visina, 150);
-            Assert.AreEqual(z.Proizvođač, true);
 
-            Assert.AreEqual(z.Starost, DateTime.Today.AddYears(-2));
-            Assert.AreEqual(z.Pregledi.Count, 0);
-            Assert.AreEqual(z.ID1, 1);
+        static IEnumerable<object[]> NeispravnaZivotinjaCSV
+        {
+            get
+            {
+                return UčitajPodatkeCSV("NeispravniPodaciZivotinja.csv");
+            }
         }
+        [TestMethod]
+        [DynamicData("NeispravnaZivotinjaCSV")]
+        [ExpectedException(typeof(FormatException))]
+        public void TestKonstruktoraZivotinjeCSV(DateTime starost,double masa, double visina)
+        { 
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri,10000);
+
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, starost, masa, visina, l);
+        }
+
 
         [TestMethod]
         public void TestPregledajZivotinju()
@@ -214,32 +275,7 @@ namespace TestZadak3
 
 
         }
-     
-
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
-        public void TestZivotinjaPogresanDatum()
-        {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(2), 1000, 150, l);}
-
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
-        public void TestZivotinjaPogresnaVisina()
-        {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 0, l);}
-
-        [TestMethod]
-        [ExpectedException(typeof(FormatException))]
-        public void TestZivotinjaPogresnaMasa()
-        {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 0, 100, l);
-        }
+    
 
         [TestMethod]
         public void TestProvjeriStanjeZivotinje()
@@ -304,6 +340,7 @@ namespace TestZadak3
             zivotinja5.PregledajZivotinju("", "", "4.0");
             zivotinja5.PregledajZivotinju("", "", "4.8");
             zivotinja5.PregledajZivotinju("", "", "4.7");
+
             zivotinja5.ProvjeriStanjeZivotinje();
 
             Assert.IsTrue(zivotinja5.Proizvođač);
@@ -315,99 +352,67 @@ namespace TestZadak3
         #endregion
 
         #region Proizvod
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void TestProizvodPogresnaVrsta()
+        static IEnumerable<object[]> NeispravanProizvodCSV
         {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
-            Proizvod p = new Proizvod("", "", "x", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
+            get
+            {
+                return UčitajPodatkeCSV("NeispravniPodaciProizvod.csv");
+            }
         }
-
         [TestMethod]
+        [DynamicData("NeispravanProizvodCSV")]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void TestProizvodPogresanProizvođač()
+        public void TestKonstruktoraProizvodaCSV(string vrsta, DateTime proizvodnja, DateTime rok, int kol)
         {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
-            Proizvod p = new Proizvod("", "", "Jaja", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
-        }
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void TestProizvodPogresanDatumProizvodnje()
-        {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
-            Proizvod p = new Proizvod("", "", "Mlijeko", z, DateTime.Today.AddDays(2), DateTime.Today.AddDays(5), 100);
-        }
-
-
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
-        public void TestProizvodPogresanRokTrajanja()
-        {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
-            Proizvod p = new Proizvod("", "", "Mlijeko", z, DateTime.Today, DateTime.Today.AddDays(-5), 100);
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Now, 20, 50, l);
+            Proizvod p = new Proizvod("", "",vrsta, zivotinja, proizvodnja, rok, kol);
         }
 
         [TestMethod]
         [ExpectedException(typeof(InvalidOperationException))]
-        public void TestProizvodPogresnaKolicina()
+        public void TestKonstruktoraProizvoda()
         {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
-            Proizvod p = new Proizvod("", "", "Mlijeko", z, DateTime.Today, DateTime.Today.AddDays(5), 0);
+            ///preostale kombinacije proizvoda i zivotinje
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
+
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Kokoška, DateTime.Now, 20, 50, l);
+            Proizvod p = new Proizvod("", "", "Sir", zivotinja, DateTime.Now, new DateTime(2022,5,5), 10);
         }
-
-
 
         [TestMethod]
-        public void TestProizvodKonstrukotr()
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestKonstruktoraProizvoda2()
         {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            ///preostale kombinacije proizvoda i zivotinje
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
 
-            Lokacija l = new Lokacija(parametri, 100);
-            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
-
-            Proizvod p = new Proizvod("", "", "Mlijeko", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
-
-            Assert.AreEqual(p.Vrsta, "Mlijeko");
-            Assert.AreEqual(z, p.Proizvođač);
-            Assert.AreEqual(p.DatumProizvodnje,DateTime.Today);
-            Assert.AreEqual(p.RokTrajanja, DateTime.Today.AddDays(5));
-            Assert.AreEqual(p.KoličinaNaStanju, 100);
-
-            z.Vrsta = ZivotinjskaVrsta.Ovca;
-            p = new Proizvod("", "", "Mlijeko", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
-            Assert.AreEqual(z, p.Proizvođač);
-
-            z.Vrsta = ZivotinjskaVrsta.Koza;
-            p = new Proizvod("", "", "Mlijeko", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
-            Assert.AreEqual(z, p.Proizvođač);
-
-            z.Vrsta = ZivotinjskaVrsta.Magarac;
-            p = new Proizvod("", "", "Mlijeko", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
-            Assert.AreEqual(z, p.Proizvođač);
-
-            z.Vrsta = ZivotinjskaVrsta.Kokoška;
-            p = new Proizvod("", "", "Jaja", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
-            Assert.AreEqual(z, p.Proizvođač);
-            Assert.AreEqual(p.Vrsta, "Jaja");
-
-            z.Vrsta = ZivotinjskaVrsta.Guska;
-            p = new Proizvod("", "", "Jaja", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
-            Assert.AreEqual(z, p.Proizvođač);
-            Assert.AreEqual(p.Vrsta, "Jaja");
-
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Kokoška, DateTime.Now, 20, 50, l);
+            Proizvod p = new Proizvod("", "", "Mlijeko", zivotinja, DateTime.Now, new DateTime(2022, 5, 5), 12);
         }
+
         #endregion
 
         #region
