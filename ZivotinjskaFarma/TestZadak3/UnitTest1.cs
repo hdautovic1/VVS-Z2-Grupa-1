@@ -180,6 +180,55 @@ namespace TestZadak3
             uspjesnaKupovina = farma.KupovinaProizvoda(p, DateTime.Today.AddDays(3), 120);
             Assert.IsFalse(uspjesnaKupovina);
         }
+        //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima)
+        [TestMethod]
+        //Životinja nije registrovana u bazi
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakRadSaZivotinjama1()
+        {
+            Farma farma = new Farma();
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 500);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
+            farma.RadSaZivotinjama("Brisanje", z);
+        }
+        [TestMethod]
+        //Životinja je već registrovana u bazi
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakRadSaZivotinjama2()
+        {
+            Farma farma = new Farma();
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 500);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
+             
+            farma.RadSaZivotinjama("Dodavanje", z);
+            farma.RadSaZivotinjama("Dodavanje", z);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestIzuzetakDodavanjeLokacije()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 100);
+            Farma farma = new Farma();
+            farma.DodavanjeNoveLokacije(l);
+            farma.DodavanjeNoveLokacije(l);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestIzuzetakSpecijalizacijaFarme()
+        {
+            Farma farma = new Farma();
+            farma.SpecijalizacijaFarme(ZivotinjskaVrsta.Koza, 100);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakSpecijalizacijaFarme2()
+        {
+            Farma farma = new Farma();
+            farma.SpecijalizacijaFarme(ZivotinjskaVrsta.Krava, 1500);
+        }
         #endregion
 
         #region Lokacija
@@ -227,6 +276,88 @@ namespace TestZadak3
         //    Assert.AreEqual(l.Površina, 100);
         //}
 
+        //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima)
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakSetterNaziva()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+            lokacija.Naziv = "";
+
+
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakSetterAdrese()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+            lokacija.Adresa = "";
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakNepodrzanGrad()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+            lokacija.Grad = "Paris";
+        }
+    
+       [TestMethod]
+       [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakNepodrzanaDrzava()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+            lokacija.Država = "Francuska";
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakNevalidanBrojUlice()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+            lokacija.BrojUlice = -2;
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakNevalidanPoštanskiBroj()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+            lokacija.PoštanskiBroj = 500;
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakNevalidnaPovršina()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+            lokacija.Površina = 0;
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakNevalidnaPovršina2()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 0);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakPrazniParametri()
+        {
+            List<string> parametri = new List<string> { "", "", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakNeispravanBrojParametara()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001" };
+            Lokacija lokacija = new Lokacija(parametri, 0);
+        }
 
         #endregion
 
@@ -347,8 +478,34 @@ namespace TestZadak3
 
 
         }
+        //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima)
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TestIzuzetakNevalidnaStarost()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Krava, new System.DateTime(2011, 4, 1), 800, 150, new Lokacija(parametri, 12000));
+            zivotinja.Starost = new DateTime(2022, 4, 11);
+            
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TestIzuzetakNevalidnaTjelesnaMasa()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Krava, new System.DateTime(2011, 4, 1), 800, 150, new Lokacija(parametri, 12000));
+            zivotinja.TjelesnaMasa = 0;
 
+        }
+        [TestMethod]
+        [ExpectedException(typeof(FormatException))]
+        public void TestIzuzetakNevalidnaVisina()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Krava, new System.DateTime(2011, 4, 1), 800, 150, new Lokacija(parametri, 12000));
+            zivotinja.Visina = 0;
 
+        }
         #endregion
 
         #region Proizvod
@@ -412,10 +569,102 @@ namespace TestZadak3
             Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Kokoška, DateTime.Now, 20, 50, l);
             Proizvod p = new Proizvod("", "", "Mlijeko", zivotinja, DateTime.Now, new DateTime(2022, 5, 5), 12);
         }
+        //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima)
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        //Vrsta proizvoda koja ne postoji
+        public void TestIzuzetkaVrsta()
+        {
+            ///preostale kombinacije proizvoda i zivotinje
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
 
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Now, 20, 50, l);
+            Proizvod p = new Proizvod("", "", "Mlijeko", zivotinja, DateTime.Now, new DateTime(2022, 5, 5), 12);
+            p.Vrsta = "Maslo";
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestIzuzetkaProizvođača()
+        {
+            ///preostale kombinacije proizvoda i zivotinje
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
+
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Kokoška, DateTime.Now, 20, 50, l);
+            Proizvod p = new Proizvod("", "", "Jaja", zivotinja, DateTime.Now, new DateTime(2022, 5, 5), 12);
+            Zivotinja zivotinja2 = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Now, 20, 50, l);
+            p.Proizvođač = zivotinja2;
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestIzuzetkaDatumaProizvodnje()
+        {
+            ///preostale kombinacije proizvoda i zivotinje
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
+
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Kokoška, DateTime.Now, 20, 50, l);
+            Proizvod p = new Proizvod("", "", "Jaja", zivotinja, DateTime.Now, new DateTime(2022, 5, 5), 12);
+            p.DatumProizvodnje = new DateTime(2022, 11, 12);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestIzuzetkaRokaTrajanja()
+        {
+            ///preostale kombinacije proizvoda i zivotinje
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
+
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Kokoška, DateTime.Now, 20, 50, l);
+            Proizvod p = new Proizvod("", "", "Jaja", zivotinja, DateTime.Now, new DateTime(2022, 5, 5), 12);
+            p.RokTrajanja = new DateTime(2021, 11, 23);
+        }
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void TestIzuzetkaKoličine()
+        {
+            ///preostale kombinacije proizvoda i zivotinje
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
+
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Kokoška, DateTime.Now, 20, 50, l);
+            Proizvod p = new Proizvod("", "", "Jaja", zivotinja, DateTime.Now, new DateTime(2022, 5, 5), 12);
+            p.KoličinaNaStanju = 0;
+        }
         #endregion
 
-        #region
+        #region Kupovina
         [TestMethod]
         public void TestKupovinaKonstruktor() {
             List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
@@ -486,6 +735,22 @@ namespace TestZadak3
             verificirana = k.VerificirajKupovinu();
             Assert.IsTrue(verificirana);
         }
+        #endregion
+
+        #region Veterinar
+        //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima)
+        [TestMethod]
+        [ExpectedException(typeof(NotImplementedException))]
+        public void TestIzuzetkaOcjeneZivotinje()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija l = new Lokacija(parametri, 100);
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
+            Veterinar veterinar = new Veterinar();
+            veterinar.ocjenaZdravstvenogStanjaZivotinje(z);
+        }
+
+
         #endregion
     }
 }

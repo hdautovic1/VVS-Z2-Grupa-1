@@ -131,6 +131,8 @@ namespace ZivotinjskaFarma
             Država = parametri.ElementAt(i);
         }
 
+
+        #endregion
         public override bool Equals(object obj)
         {
             return obj is Lokacija lokacija &&
@@ -147,7 +149,6 @@ namespace ZivotinjskaFarma
         {
             return HashCode.Combine(Naziv, Adresa, Grad, Država, BrojUlice, PoštanskiBroj, Površina);
         }
-
-        #endregion
     }
+
 }
