@@ -87,19 +87,22 @@ namespace ZivotinjskaFarma
         /// životinja prestaje biti proizvođač.
         /// </summary>
         /// Implementirao Hamza Dautović
+
         public void ProvjeriStanjeZivotinje()
         {
-            if ((DateTime.Now-starost).Days >= (10 * 365)) { 
-                proizvođač = false; 
+            if ((DateTime.Now - starost).Days >= (10 * 365))
+            {
+                proizvođač = false;
             }
-            else if ((DateTime.Now - starost).Days >= (7 * 365) && Double.Parse(pregledi[pregledi.Count - 1].Substring(pregledi[pregledi.Count -1].Length -3)) <= 3.5) {
-                proizvođač = false; 
+            else if ((DateTime.Now - starost).Days >= (7 * 365) && Double.Parse(pregledi[pregledi.Count - 1].Substring(pregledi[pregledi.Count - 1].Length - 3)) <= 3.5)
+            {
+                proizvođač = false;
             }
             else
             {
                 double suma = 0;
                 int brojac = 0;
-                for (int i = pregledi.Count - 1 ; ; i--)
+                for (int i = pregledi.Count - 1; ; i--)
                 {
                     suma += Double.Parse(pregledi[i].Substring(pregledi[i].Length - 3));
                     brojac++;
@@ -107,8 +110,10 @@ namespace ZivotinjskaFarma
 
                 }
 
-                if ((suma / 3) < 4) {
-                    proizvođač = false; 
+                if ((suma / 3) < 4)
+                {
+                    Console.WriteLine(vrsta + " " + proizvođač);
+                    proizvođač = false;
                 }
             }
         }
@@ -120,7 +125,7 @@ namespace ZivotinjskaFarma
                             + "OCJENA: " + ocjena;
             pregledi.Add(pregled);
         }
-
+        
         public override bool Equals(object obj)
         {
             return obj is Zivotinja zivotinja &&
@@ -134,7 +139,7 @@ namespace ZivotinjskaFarma
         {
             return HashCode.Combine(Vrsta, Starost, TjelesnaMasa, Visina);
         }
-
+        
 
         #endregion
     }

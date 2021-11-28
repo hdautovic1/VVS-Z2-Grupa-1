@@ -1,0 +1,31 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Lokacije>
+	<Lokacija>
+		<Naziv>Neki naziv</Naziv>
+		<Adresa>Neka adresa</Adresa>
+		<BrojUlice>69</BrojUlice>
+		<Grad>Sarajevo</Grad>
+		<PoštanskiBroj>71000</PoštanskiBroj>
+		<Država>Bosna i Hercegovina</Država>
+		<Površina>10000</Površina>
+	</Lokacija>
+	<Lokacija>
+		<Naziv>Neki drugi naziv</Naziv>
+		<Adresa>Neka druga adresa</Adresa>
+		<BrojUlice>420</BrojUlice>
+		<Grad>Sarajevo</Grad>
+		<PoštanskiBroj>72000</PoštanskiBroj>
+		<Država>Bosna i Hercegovina</Država>
+		<Površina>13423</Površina>
+	</Lokacija>
+
+	<Lokacija>
+		<Naziv>Neki lijevi naziv</Naziv>
+		<Adresa>Neka lijeva adresa</Adresa>
+		<BrojUlice>666</BrojUlice>
+		<Grad>Sarajevo</Grad>
+		<PoštanskiBroj>71500</PoštanskiBroj>
+		<Država>Bosna i Hercegovina</Država>
+		<Površina>10013400</Površina>
+	</Lokacija>
+</Lokacije>

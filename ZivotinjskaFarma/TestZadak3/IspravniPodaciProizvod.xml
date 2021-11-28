@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Proizvodi>
+	<Proizvod>
+		<Vrsta>Mlijeko</Vrsta>
+		<Proizvodnja>01/01/2020</Proizvodnja>
+		<Rok>01/05/2020</Rok>
+		<Količina>30</Količina>
+		<Vrsta>Mlijeko</Vrsta>
+		<Proizvodnja>02/04/2020</Proizvodnja>
+		<Rok>02/06/2020</Rok>
+		<Količina>40</Količina>
+	</Proizvod>
+</Proizvodi>

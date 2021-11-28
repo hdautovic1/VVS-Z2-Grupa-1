@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Zivotinje>
+	<Zivotinja>
+		<Starost>01/01/2017</Starost>
+		<Masa>100</Masa>
+		<Visina>150</Visina>
+	</Zivotinja>
+	<Zivotinja>
+		<Starost>01/01/2015</Starost>
+		<Masa>123</Masa>
+		<Visina>100</Visina>
+	</Zivotinja>
+	<Zivotinja>
+		<Starost>01/08/2012</Starost>
+		<Masa>1020</Masa>
+		<Visina>153</Visina>
+	</Zivotinja>
+	<Zivotinja>
+		<Starost>03/02/2014</Starost>
+		<Masa>100</Masa>
+		<Visina>150</Visina>
+	</Zivotinja>
+
+</Zivotinje>

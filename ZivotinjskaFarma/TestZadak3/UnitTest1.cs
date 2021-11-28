@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Xml;
 using ZivotinjskaFarma;
 namespace TestZadak3
 {
@@ -34,8 +35,33 @@ namespace TestZadak3
                             DateTime.Parse(elements[2]),Int32.Parse(elements[3]) };
                 }
             }
-        }
+        }     
 
+        public static IEnumerable<object[]> UčitajPodatkeXML(string fileName)
+        {
+            XmlDocument doc = new XmlDocument();
+            doc.Load(fileName);
+            foreach (XmlNode node in doc.DocumentElement.ChildNodes)
+            {
+                List<string> elements = new List<string>();
+                foreach (XmlNode innerNode in node)
+                {
+                    elements.Add(innerNode.InnerText);
+                }
+
+                if (fileName.Equals("IspravniPodaciLokacija.xml"))
+                    yield return new object[] { elements[0], elements[1],
+                        elements[2], elements[3], elements[4], elements[5],double.Parse(elements[6]) };
+
+                else if (fileName.Equals("IspravniPodaciZivotinja.xml"))
+                    yield return new object[] { DateTime.Parse(elements[0]), double.Parse(elements[1]),
+                            double.Parse(elements[2])};
+
+                else if (fileName.Equals("IspravniPodaciProizvod.xml"))
+                    yield return new object[] { elements[0],DateTime.Parse(elements[1]),
+                            DateTime.Parse(elements[2]),Int32.Parse(elements[3]) };            
+            }
+        }
 
         #region Farma
         [TestMethod]
@@ -47,7 +73,6 @@ namespace TestZadak3
             Assert.AreEqual(farma.Zivotinje.Count, 0);
             Assert.AreEqual(farma.Kupovine.Count, 0);
         }
-
         [TestMethod]
         public void TestDodavanjeiBrisanjeLokacijeFarme()
         {
@@ -260,6 +285,7 @@ namespace TestZadak3
             Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Today.AddYears(-2), 1000, 150, l);
             farma.RadSaZivotinjama("Brisanje", z);
         }
+
         [TestMethod]
         //Životinja je već registrovana u bazi
         [ExpectedException(typeof(ArgumentException))]
@@ -308,6 +334,15 @@ namespace TestZadak3
                 return UčitajPodatkeCSV("NeispravniPodaciLokacija.csv");
             }
         }
+
+        static IEnumerable<object[]> IspravnaLokacijaXML
+        {
+            get
+            {
+                return UčitajPodatkeXML("IspravniPodaciLokacija.xml");
+            }
+        }
+
         [TestMethod]
         [DynamicData("NeispravnaLokacijaCSV")]
         [ExpectedException(typeof(ArgumentException))]
@@ -326,23 +361,22 @@ namespace TestZadak3
         }
 
 
-        //[TestMethod]        
-        //public void TestLokacija()
-        //{
-        //    List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-        //    List<string> parametri2 = new List<string> { "Naziv", "Adresa", "Sarajevo", "10001", "Bosna i Hercegovina" };
+        [TestMethod]
+        [DynamicData("IspravnaLokacijaXML")]
+        public void TestLokacijaKonstruktorXML(string naziv, string adresa, string brojUlice, string grad,
+            string postanskiBroj, string drzava, double povrsina)
+        {
+            List<string> parametri = new List<String>();
+            parametri.Add(naziv);
+            parametri.Add(adresa);
+            parametri.Add(brojUlice);
+            parametri.Add(grad);
+            parametri.Add(postanskiBroj);
+            parametri.Add(drzava);
 
-        //    Lokacija l = new Lokacija(parametri2,100);
-        //    l = new Lokacija(parametri, 100);
-
-        //    Assert.AreEqual(l.Adresa, "Adresa");
-        //    Assert.AreEqual(l.Naziv, "Naziv");
-        //    Assert.AreEqual(l.BrojUlice, 2);
-        //    Assert.AreEqual(l.Grad, "Sarajevo");
-        //    Assert.AreEqual(l.PoštanskiBroj, 10001);
-        //    Assert.AreEqual(l.Država, "Bosna i Hercegovina");
-        //    Assert.AreEqual(l.Površina, 100);
-        //}
+            Lokacija l = new Lokacija(parametri, povrsina);
+            Assert.AreEqual("Sarajevo", l.Grad);
+        }
 
         //Implementirala Selma Hadžijusufović (izuzeci obrađeni testovima i basic tests)
         [TestMethod]
@@ -358,6 +392,16 @@ namespace TestZadak3
             Assert.AreNotEqual(lokacija1.GetHashCode(), lokacija3.GetHashCode());
 
         }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentException))]
+        public void TestIzuzetakNevalidnaPovršina()
+        {
+            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
+            Lokacija lokacija = new Lokacija(parametri, 1000);
+            lokacija.Površina = 0;
+        }
+        
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void TestIzuzetakSetterNaziva()
@@ -368,6 +412,7 @@ namespace TestZadak3
 
 
         }
+        
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void TestIzuzetakSetterAdrese()
@@ -410,14 +455,7 @@ namespace TestZadak3
             Lokacija lokacija = new Lokacija(parametri, 1000);
             lokacija.PoštanskiBroj = 500;
         }
-        [TestMethod]
-        [ExpectedException(typeof(ArgumentException))]
-        public void TestIzuzetakNevalidnaPovršina()
-        {
-            List<string> parametri = new List<string> { "Naziv", "Adresa", "2", "Sarajevo", "10001", "Bosna i Hercegovina" };
-            Lokacija lokacija = new Lokacija(parametri, 1000);
-            lokacija.Površina = 0;
-        }
+    
         [TestMethod]
         [ExpectedException(typeof(ArgumentException))]
         public void TestIzuzetakNevalidnaPovršina2()
@@ -457,6 +495,14 @@ namespace TestZadak3
                 return UčitajPodatkeCSV("NeispravniPodaciZivotinja.csv");
             }
         }
+
+        static IEnumerable<object[]> IspravnaZivotinjaXML
+        {
+            get
+            {
+                return UčitajPodatkeXML("IspravniPodaciZivotinja.xml");
+            }
+        }
         [TestMethod]
         [DynamicData("NeispravnaZivotinjaCSV")]
         [ExpectedException(typeof(FormatException))]
@@ -472,6 +518,23 @@ namespace TestZadak3
             Lokacija l = new Lokacija(parametri,10000);
 
             Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, starost, masa, visina, l);
+        }
+
+        [TestMethod]
+        [DynamicData("IspravnaZivotinjaXML")]
+        public void TestKonstruktoraZivotinjeXML(DateTime starost, double masa, double visina)
+        {
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
+
+            Zivotinja z = new Zivotinja(ZivotinjskaVrsta.Krava, starost, masa, visina, l);
+            Assert.AreEqual(z.Vrsta, ZivotinjskaVrsta.Krava);
         }
 
 
@@ -615,6 +678,14 @@ namespace TestZadak3
                 return UčitajPodatkeCSV("NeispravniPodaciProizvod.csv");
             }
         }
+        static IEnumerable<object[]> IspravanProizvodXML
+        {
+            get
+            {
+                return UčitajPodatkeXML("IspravniPodaciProizvod.xml");
+            }
+        }
+
         [TestMethod]
         [DynamicData("NeispravanProizvodCSV")]
         [ExpectedException(typeof(InvalidOperationException))]
@@ -631,6 +702,24 @@ namespace TestZadak3
 
             Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Now, 20, 50, l);
             Proizvod p = new Proizvod("", "",vrsta, zivotinja, proizvodnja, rok, kol);
+        }
+
+        [TestMethod]
+        [DynamicData("IspravanProizvodXML")]
+        public void TestKonstruktoraProizvodaXML(string vrsta, DateTime proizvodnja, DateTime rok, int kol)
+        {
+            List<string> parametri = new List<string>();
+            parametri.Add("Naziv");
+            parametri.Add("Adresa");
+            parametri.Add("17");
+            parametri.Add("Sarajevo");
+            parametri.Add("71000");
+            parametri.Add("Bosna i Hercegovina");
+            Lokacija l = new Lokacija(parametri, 10000);
+            Zivotinja zivotinja = new Zivotinja(ZivotinjskaVrsta.Krava, DateTime.Now, 20, 50, l);
+
+            Proizvod p = new Proizvod("", "", vrsta, zivotinja, proizvodnja, rok, kol);
+            Assert.AreEqual(ZivotinjskaVrsta.Krava, p.Proizvođač.Vrsta);
         }
 
         [TestMethod]
@@ -794,7 +883,6 @@ namespace TestZadak3
 
             Proizvod p = new Proizvod("", "", "Mlijeko", z, DateTime.Today, DateTime.Today.AddDays(5), 100);
             Kupovina k = new Kupovina("2", DateTime.Today, DateTime.Today.AddDays(3), p, 30, false);
-            Assert.AreEqual(Kupovina.DajSljedeciBroj(), 1);
 
             Assert.AreEqual(k.IDKupca1, "2");
             Assert.AreEqual(k.DatumKupovine, DateTime.Today);
